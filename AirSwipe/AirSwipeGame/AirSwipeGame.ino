@@ -49,10 +49,10 @@
 // On Mega/ADK/Due, SDA == Digital 20, SCL == Digital 21
 
 // Use I2C, no reset pin!
-Adafruit_CAP1188 cap = Adafruit_CAP1188();
+//Adafruit_CAP1188 cap = Adafruit_CAP1188();
 
 // Or...Use I2C, with reset pin
-//Adafruit_CAP1188 cap = Adafruit_CAP1188(CAP1188_RESET);
+Adafruit_CAP1188 cap = Adafruit_CAP1188(CAP1188_RESET);
 
 // Or... Hardware SPI, CS pin & reset pin
 // Adafruit_CAP1188 cap = Adafruit_CAP1188(CAP1188_CS, CAP1188_RESET);
@@ -74,6 +74,10 @@ void setup() {
   }
   Serial.println("CAP1188 found!");
   pinMode(13, OUTPUT);
+
+  // Reset the Capacitive Sensor
+  digitalWrite(CAP1188_RESET,HIGH);
+  digitalWrite(CAP1188_RESET,LOW);
 }
 
 void clear()
