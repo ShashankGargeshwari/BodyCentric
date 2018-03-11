@@ -15,16 +15,12 @@
 
 
   Additions By Shashank Gargeshwari :
-  The original file has been repurposed to detect input from a 9 key touchpad. 
-  Since the capacitive sensor has only 8 capPads/Inputs, one might wrongly assume 
-  that the maximum number of inputs one can get from the sensor is 8. Infact, for
-  a sensor with n inputs, it is actually (2^n - 1). So this sensor can ideally detect 
-  255 inputs. This is done by multiplexing each capacitive pad so that it can be 
-  determined which location is being activated. 
+  The original file has been repurposed to detect input from 4 Pad Hover sensors.
+  These senors consist of large patches of aluminium foil hooked up to the capacitive sensor.
+  The aluminium foil patches can be activated by bodies from a distance.
 
-  For this example, a 9 key has been selected to showcase the idea without the 
-  increased complexity of actually implementing a 255 point input pad.
-  4 capPad are needed to recieve inputs from a 9 key input system.
+  This particular example is tailored to detect input from 4 sensors and push their activation
+  state date onto the Serial line. 
  ****************************************************/
 
 #include <Wire.h>
@@ -102,56 +98,12 @@ void loop() {
     } else {
       capPad[i] = 0;
     }
-
-    // Find out which key is being touched
-    // Note that four capPads are being used. If they are p0, p1, p2 and p3, then the board is wired up to respond 
-    // when the pads are activated in the following way
-    // -------------------------------- 
-    //|    p0    |    p3    |    p2    |
-    // --------------------------------
-    //|  p2,p3   |    p1    |  p1,p3   |
-    // --------------------------------
-    //|  p1,p2   | p1,p2,p3 |  p0,p2   |
-    // --------------------------------
-       //Serial.println("*");
-    if(capPad[0] == 0 )
-    {
-      // If the capPad[0] is 0, that means that the pad is either not being touched or it is one of the 7 keys the 3 Caps can represent.
-      int num = 4 * capPad[1] + 2 * capPad[2] + capPad[3];
-
-      switch(num)
-      {
-        case 0 : Serial.println("000"); Serial.println("000"); Serial.println("000"); 
-        break;
-        case 1 : Serial.println("010"); Serial.println("000"); Serial.println("000"); 
-        break;
-        case 2 : Serial.println("001"); Serial.println("000"); Serial.println("000"); 
-        break;
-        case 3 : Serial.println("000"); Serial.println("100"); Serial.println("000"); 
-        break;
-        case 4 : Serial.println("000"); Serial.println("010"); Serial.println("000"); 
-        break;
-        case 5 : Serial.println("000"); Serial.println("001"); Serial.println("000"); 
-        break;
-        case 6 : Serial.println("000"); Serial.println("000"); Serial.println("100"); 
-        break;
-        case 7 : Serial.println("000"); Serial.println("000"); Serial.println("010"); 
-        break;
-      }
-    }
-    else
-    {
-      // If capPad[0] is 1, then it is either the key where all other capPads are zero, or the 9th key.
-      switch(capPad[2])
-      {
-        case 0 : Serial.println("100"); Serial.println("000"); Serial.println("000"); 
-        break;
-        case 1 : Serial.println("000"); Serial.println("000"); Serial.println("001"); 
-        break;
-      }
-    }
- 
   }
+    // Find out which pad is being activated. For this case, the highest 8 bits are being used. 
+    // Serial Data is being pushed in the order 8,7,6,5
+    String activationPattern = String(capPad[7]) + String(capPad[6]) +  String(capPad[5]) +  String(capPad[4]);
+    
+    Serial.print(activationPattern);
 
   // Delay for apparently stability purposes
    delay(50);
