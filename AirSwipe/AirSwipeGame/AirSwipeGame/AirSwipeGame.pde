@@ -49,7 +49,7 @@ class Knee
   // When the knee is activated, a boundary is added to the world
   public void activate()
   {
-    b.y = y - 30;
+    b.y = y + 100;
   }
   
   // When the knee is deactivated, the boundary is removed from the world
@@ -167,18 +167,18 @@ void draw() {
       // Detect inputs from right knee and activate accordingly
       if(inBuffer.substring(2).equals("10"))
       {
-        knees.get(0).activate();
+        knees.get(3).activate();
         println("YAASS");
       }
       else
       if(inBuffer.substring(2).equals("11"))
       {
-         knees.get(1).activate();
+         knees.get(4).activate();
       }
       else
       if(inBuffer.substring(2).equals("01"))
       {
-         knees.get(2).activate();
+         knees.get(5).activate();
       }
     }
     else
