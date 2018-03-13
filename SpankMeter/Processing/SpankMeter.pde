@@ -34,8 +34,8 @@ void draw() {
   while (myPort.available() > 0) {
     inBuffer = myPort.readString();   
     if (inBuffer != null) {
-      println("Buffer " + inBuffer);
-    image(heart, width/2 , height/2 );
+      println("Buffer" + inBuffer);
+    image(heart, width/2 , height/2 , float(inBuffer)/150 , float(inBuffer)/150);
     }
   }
   
