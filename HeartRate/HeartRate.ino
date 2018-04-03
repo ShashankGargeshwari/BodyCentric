@@ -29,7 +29,7 @@ void loop() {
   // play the effect!
   drv.go();
 
-  int delayTime = (60.0/heartRate)*1000;
+  int delayTime = ((60.0/heartRate)*1000);
   
   // wait a bit
   delay(delayTime);
