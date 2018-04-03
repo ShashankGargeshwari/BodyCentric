@@ -17,20 +17,38 @@ void setup() {
 
 uint8_t effect = 1;
 
-float heartRate = 110;
+byte heartRate = 10;
 
-void loop() {
-  Serial.print("Beat");
+float lastBeatMillis = 0;
+float nextBeatMillis = 0;
 
-  // set the effect to play
-  drv.setWaveform(0, 10);  // play effect 
-  drv.setWaveform(1, 0);       // end waveform
+void loop() 
+{
+  // Read the heartRate from the Processing sketch
+  if (Serial.available() > 0) 
+  {
+    // read the incoming byte:
+    heartRate = Serial.read();
+    heartRate += 60;
 
-  // play the effect!
-  drv.go();
+    Serial.println(heartRate);
+  }
 
-  int delayTime = ((60.0/heartRate)*1000);
+  // If time is greater than scheduled beat, beat
+  if(millis() > nextBeatMillis)
+  {
+    // set the effect to play
+    drv.setWaveform(0, 10);  // play effect 
+    drv.setWaveform(1, 0);       // end waveform
   
-  // wait a bit
-  delay(delayTime);
+    // play the effect!
+    drv.go();
+    lastBeatMillis = millis();
+  
+    int delayTime = ((60.0/heartRate)*1000);
+
+    // Schedule next beat
+    nextBeatMillis = lastBeatMillis + delayTime;
+  }
+  
 }
